@@ -27,7 +27,7 @@ function getGraphqlEndpoint() {
   const endpointNames = Object.keys(endpointsExt.getRawEndpointsMap())
 
   const chosenEndpointName = process.env.NODE_ENV || 'development'
-  if(!endpointNames.includes(chosenEndpointName)) {
+  if (!endpointNames.includes(chosenEndpointName)) {
     throw new Error(`Can't find endpoint name ${chosenEndpointName} in .graphqlconfig, \
       available endpoint names: ${endpointNames}`)
   }
@@ -40,13 +40,14 @@ function getGraphqlEndpoint() {
     endpoint = endpoint['url']
   }
 
-  if(typeof endpoint !== 'string') {
+  if (typeof endpoint !== 'string') {
     throw new Error(`Endpoint url ${endpoint} must be string`)
   }
 
   return endpoint
 }
 
+// TODO: use https://github.com/zeit/next.js/blob/v3-beta/examples/with-universal-configuration/env-config.js
 module.exports = {
   webpack: (config, { dev }) => {
     const prod = !dev
@@ -55,7 +56,7 @@ module.exports = {
 
     config.plugins.push(
       new DefinePlugin({
-        '__GRAPHQL_ENDPOINT__': JSON.stringify(getGraphqlEndpoint())
+        __GRAPHQL_ENDPOINT__: JSON.stringify(getGraphqlEndpoint())
       })
     )
 
