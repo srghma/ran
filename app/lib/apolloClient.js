@@ -1,9 +1,10 @@
 import ApolloClient, { createNetworkInterface } from 'apollo-client'
 import persist from './persist'
 
+console.log(GRAPHQL_ENDPOINT)
 const initNetworkInterface = token => {
   const networkInterface = createNetworkInterface({
-    uri: 'https://api.graph.cool/simple/v1/cixmkt2ul01q00122mksg82pn',
+    uri: GRAPHQL_ENDPOINT,
     opts: {
       credentials: 'same-origin'
     }

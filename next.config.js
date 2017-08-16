@@ -1,12 +1,63 @@
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const { IgnorePlugin } = require('webpack')
+const { IgnorePlugin, DefinePlugin } = require('webpack')
 const OfflinePlugin = require('offline-plugin')
+const { getGraphQLProjectConfig } = require('graphql-config')
+
+// make pretty-error handle all errors
+var PrettyError = require('pretty-error')
+var pe = new PrettyError()
+
+// To render exceptions thrown in non-promies code:
+process.on('uncaughtException', function(error) {
+  console.log(pe.render(error))
+})
+
+// To render unhandled rejections created in BlueBird:
+process.on('unhandledRejection', function(reason) {
+  console.log('Unhandled rejection')
+  console.log(pe.render(reason))
+})
+
+// helpers
+function getGraphqlEndpoint() {
+  const config = getGraphQLProjectConfig()
+  const endpointsExt = config.endpointsExtension
+
+  // get endpoint names (it will always have at least one item 'default')
+  const endpointNames = Object.keys(endpointsExt.getRawEndpointsMap())
+
+  const chosenEndpointName = process.env.NODE_ENV || 'development'
+  if(!endpointNames.includes(chosenEndpointName)) {
+    throw new Error(`Can't find endpoint name ${chosenEndpointName} in .graphqlconfig, \
+      available endpoint names: ${endpointNames}`)
+  }
+
+  // TODO: fill envs, https://github.com/graphcool/graphql-config/blob/master/docs/README.md#graphqlendpointsextension
+  const filledEnvs = {}
+  let endpoint = endpointsExt.getEndpoint(chosenEndpointName, filledEnvs)
+
+  if (typeof endpoint !== 'string') {
+    endpoint = endpoint['url']
+  }
+
+  if(typeof endpoint !== 'string') {
+    throw new Error(`Endpoint url ${endpoint} must be string`)
+  }
+
+  return endpoint
+}
 
 module.exports = {
   webpack: (config, { dev }) => {
     const prod = !dev
 
     config.plugins.push(new IgnorePlugin(/^\.\/locale$/, /moment$/))
+
+    config.plugins.push(
+      new DefinePlugin({
+        '__GRAPHQL_ENDPOINT__': JSON.stringify(getGraphqlEndpoint())
+      })
+    )
 
     // FIXME: not fixing gql and graphql files, but fixing js files
     if (dev) {

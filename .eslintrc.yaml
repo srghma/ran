@@ -23,10 +23,10 @@ globals:
   ANALYTICS_TRACKING_ID: false
   AUTH0_CLIENT_ID: false
   AUTH0_DOMAIN: false
-  GRAPHQL_ENDPOINT: false
+  GRAPHQL_ENDPOINT: true
   NEWSLETTER_FORM_ACTION: false
   NEWSLETTER_FORM_INPUT_NAME: false
-  ON_PRODUCTION: true
+  ON_PRODUCTION: true,
 rules:
   semi:
   - error
