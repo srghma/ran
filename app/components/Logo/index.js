@@ -1,5 +1,7 @@
 import { Link } from '~/routes'
 import styled from 'styled-components'
+import logoSrc from './logo.png'
+console.log(logoSrc)
 
 export const Img = styled.img`
   position: absolute;
@@ -8,7 +10,7 @@ export const Img = styled.img`
 `
 const Logo = () =>
   <Link href="/">
-    <Img src="/static/logo.png" alt="logo" />
+    <Img src={logoSrc} alt="logo" />
   </Link>
 
 export default Logo

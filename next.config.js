@@ -8,18 +8,70 @@ module.exports = {
 
     config.plugins.push(new IgnorePlugin(/^\.\/locale$/, /moment$/))
 
-    // FIXME: not fixing gql and graphql files, but fixing js files
-    if (dev) {
-      config.module.rules.push({
-        test: /\.(jsx?|gql|graphql)$/,
-        loader: 'eslint-loader',
-        exclude: /node_modules/,
-        enforce: 'pre',
-        options: {
-          fix: true
+    // Images task
+    config.module.rules.push({
+      test: /\.(png|jpe?g|gif)$/i,
+      use: [
+        {
+          loader: 'url-loader',
+          options: {
+            outputPath: 'static/',
+            limit: 1000
+          }
+        },
+        {
+          loader: 'image-webpack-loader',
+          options: {
+            gifsicle: {
+              interlaced: false
+            },
+            optipng: {
+              optimizationLevel: 7
+            },
+            pngquant: {
+              quality: '65-90',
+              speed: 4
+            },
+            mozjpeg: {
+              progressive: true,
+              quality: 65
+            }
+          }
         }
-      })
-    }
+      ]
+    })
+
+    // config.module.rules.push({
+    //   test: /\.(ico|gif|png|jpg|jpeg|svg|webp)$/,
+    //   use: [
+    //     {
+    //       loader: 'emit-file-loader',
+    //       options: {
+    //         name: 'assets/[name].[ext]',
+    //       },
+    //     },
+    //     {
+    //       loader: 'file-loader',
+    //       options: {
+    //         emitFile: false,
+    //         name: 'assets/[name].[ext]'
+    //       },
+    //     },
+    //   ],
+    // })
+
+    // // FIXME: not fixing gql and graphql files, but fixing js files
+    // if (dev) {
+    //   config.module.rules.push({
+    //     test: /\.(jsx?|gql|graphql)$/,
+    //     loader: 'eslint-loader',
+    //     exclude: /node_modules/,
+    //     enforce: 'pre',
+    //     options: {
+    //       fix: true
+    //     }
+    //   })
+    // }
 
     if (process.env.ANALYZE_BUILD) {
       config.plugins.push(
