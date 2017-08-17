@@ -94,7 +94,6 @@ app.prepare().then(() => {
     })
   )
   server.use(helmet())
-  // server.use('/static', express.static(path.resolve('./.next/static')))
   server.use(routerHandler)
 
   server.get('/sw.js', (req, res) =>
