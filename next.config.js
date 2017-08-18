@@ -8,14 +8,27 @@ module.exports = {
 
     config.plugins.push(new IgnorePlugin(/^\.\/locale$/, /moment$/))
 
-    // Images task
+    // Image task to use images in component directory
     config.module.rules.push({
       test: /\.(png|jpe?g|gif)$/i,
       use: [
+        // using emit-file-loader just to shut up 'Cannot find module',
+        // it will make copy of image in component directory
+        {
+          loader: 'emit-file-loader',
+          options: {
+            name: 'dist/[path][name].[ext]'
+          }
+        },
+        // this will create image copy, that we will use
         {
           loader: 'url-loader',
           options: {
+            // output image like '/.next/static/longhash.png'
             outputPath: 'static/',
+            // this dont change url of image,
+            // this is used just to shut up '__webpack_public_path__ is not defined'
+            publicPath: '/_next/webpack/',
             limit: 1000
           }
         },
@@ -40,25 +53,6 @@ module.exports = {
         }
       ]
     })
-
-    // config.module.rules.push({
-    //   test: /\.(ico|gif|png|jpg|jpeg|svg|webp)$/,
-    //   use: [
-    //     {
-    //       loader: 'emit-file-loader',
-    //       options: {
-    //         name: 'assets/[name].[ext]',
-    //       },
-    //     },
-    //     {
-    //       loader: 'file-loader',
-    //       options: {
-    //         emitFile: false,
-    //         name: 'assets/[name].[ext]'
-    //       },
-    //     },
-    //   ],
-    // })
 
     // FIXME: not fixing gql and graphql files, but fixing js files
     if (dev) {
