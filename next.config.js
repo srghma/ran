@@ -60,18 +60,18 @@ module.exports = {
     //   ],
     // })
 
-    // // FIXME: not fixing gql and graphql files, but fixing js files
-    // if (dev) {
-    //   config.module.rules.push({
-    //     test: /\.(jsx?|gql|graphql)$/,
-    //     loader: 'eslint-loader',
-    //     exclude: /node_modules/,
-    //     enforce: 'pre',
-    //     options: {
-    //       fix: true
-    //     }
-    //   })
-    // }
+    // FIXME: not fixing gql and graphql files, but fixing js files
+    if (dev) {
+      config.module.rules.push({
+        test: /\.(jsx?|gql|graphql)$/,
+        loader: 'eslint-loader',
+        exclude: /node_modules/,
+        enforce: 'pre',
+        options: {
+          fix: true
+        }
+      })
+    }
 
     if (process.env.ANALYZE_BUILD) {
       config.plugins.push(
