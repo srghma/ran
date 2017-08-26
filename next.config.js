@@ -20,15 +20,14 @@ module.exports = {
             name: 'dist/[path][name].[ext]'
           }
         },
-        // this will create image copy, that we will use
+        // this will create image copy, that we will use,
+        // output path - '/.next/static/longhash.png'
+        // url - '/_next/static/longhash.png'
         {
           loader: 'url-loader',
           options: {
-            // output image like '/.next/static/longhash.png'
             outputPath: 'static/',
-            // this dont change url of image,
-            // this is used just to shut up '__webpack_public_path__ is not defined'
-            publicPath: '/_next/webpack/',
+            publicPath: '/_next/',
             limit: 1000
           }
         },
