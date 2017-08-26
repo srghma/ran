@@ -3,7 +3,6 @@ const express = require('express')
 const next = require('next')
 const compression = require('compression')
 const LRUCache = require('lru-cache')
-const path = require('path')
 const fs = require('fs')
 const cors = require('cors')
 const helmet = require('helmet')
@@ -11,6 +10,7 @@ require('dotenv').config()
 
 const router = require('../app/routes')
 const logger = require('./logger')
+const utils = require('./utils')
 
 const isDev = process.env.NODE_ENV !== 'production'
 const isProd = !isDev
@@ -26,15 +26,17 @@ const handle = app.getRequestHandler()
 
 const ssrCache = new LRUCache({
   max: 100,
-  maxAge: 3600, // 1 hour
+  maxAge: 3600 // 1 hour
 })
 
 const buildStats = isProd
-  ? JSON.parse(fs.readFileSync('./.next/build-stats.json', 'utf8').toString())
+  ? JSON.parse(
+      fs.readFileSync(utils.inDotNextDir('build-stats.json'), 'utf8').toString()
+    )
   : null
 
 const buildId = isProd
-  ? fs.readFileSync('./.next/BUILD_ID', 'utf8').toString()
+  ? fs.readFileSync(utils.inDotNextDir('BUILD_ID'), 'utf8').toString()
   : null
 
 /*
@@ -85,38 +87,39 @@ const routerHandler = router.getRequestHandler(
 app.prepare().then(() => {
   const server = express()
 
+  server.use('/_next/static', express.static(utils.inDotNextDir('static')))
   server.use(compression({ threshold: 0 }))
   server.use(
     cors({
       origin:
         prettyHost.indexOf('http') !== -1 ? prettyHost : `http://${prettyHost}`,
-      credentials: true,
+      credentials: true
     })
   )
   server.use(helmet())
   server.use(routerHandler)
 
   server.get('/sw.js', (req, res) =>
-    app.serveStatic(req, res, path.resolve('./.next/sw.js'))
+    app.serveStatic(req, res, utils.inDotNextDir('sw.js'))
   )
 
   server.get('/manifest.html', (req, res) =>
-    app.serveStatic(req, res, path.resolve('./.next/manifest.html'))
+    app.serveStatic(req, res, utils.inDotNextDir('manifest.html'))
   )
 
   server.get('/manifest.appcache', (req, res) =>
-    app.serveStatic(req, res, path.resolve('./.next/manifest.appcache'))
+    app.serveStatic(req, res, utils.inDotNextDir('manifest.appcache'))
   )
 
   if (isProd) {
     server.get('/_next/-/app.js', (req, res) =>
-      app.serveStatic(req, res, path.resolve('./.next/app.js'))
+      app.serveStatic(req, res, utils.inDotNextDir('app.js'))
     )
 
     const hash = buildStats['app.js'] ? buildStats['app.js'].hash : buildId
 
     server.get(`/_next/${hash}/app.js`, (req, res) =>
-      app.serveStatic(req, res, path.resolve('./.next/app.js'))
+      app.serveStatic(req, res, utils.inDotNextDir('app.js'))
     )
   }
 
