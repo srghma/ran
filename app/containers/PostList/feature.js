@@ -15,7 +15,11 @@ const PostList = ({
   data: { allPosts, loading, _allPostsMeta },
   loadMorePosts
 }) => {
-  if (allPosts && allPosts.length) {
+  if (loading) {
+    return <Loading>Loading</Loading>
+  } else if (allPosts.length === 0) {
+    return <p>no posts yet</p>
+  } else {
     const areMorePosts = allPosts.length < _allPostsMeta.count
     return (
       <Main>
@@ -51,7 +55,6 @@ const PostList = ({
       </Main>
     )
   }
-  return <Loading>Loading</Loading>
 }
 
 PostList.propTypes = {

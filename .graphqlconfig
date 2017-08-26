@@ -2,7 +2,7 @@
   "schemaPath": "app/schema.graphql",
   "extensions": {
     "endpoints": {
-      "default": "https://api.graph.cool/simple/v1/cixmkt2ul01q00122mksg82pn"
+      "default": "https://api.graph.cool/simple/v1/cj6alpbu60z8s0196ryeqngxs"
     }
   }
 }

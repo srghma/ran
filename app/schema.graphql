@@ -1,5 +1,5 @@
-# source: https://api.graph.cool/simple/v1/cixmkt2ul01q00122mksg82pn
-# timestamp: Sun Aug 20 2017 17:33:51 GMT+0300 (EEST)
+# source: https://api.graph.cool/simple/v1/cj6alpbu60z8s0196ryeqngxs
+# timestamp: Sat Aug 26 2017 14:21:19 GMT+0300 (EEST)
 
 enum _ModelMutationType {
   CREATED
@@ -32,7 +32,10 @@ input CreatePost {
 }
 
 input CreateUser {
+  # im first name discription
   firstName: String!
+
+  # asdfasdf
   lastName: String!
 }
 
@@ -40,12 +43,12 @@ scalar DateTime
 
 type File implements Node {
   contentType: String!
-  createdAt: DateTime
+  createdAt: DateTime!
   id: ID!
   name: String!
   secret: String!
   size: Int!
-  updatedAt: DateTime
+  updatedAt: DateTime!
   url: String!
 }
 
@@ -344,12 +347,12 @@ enum FileOrderBy {
 
 type FilePreviousValues {
   contentType: String!
-  createdAt: DateTime
+  createdAt: DateTime!
   id: ID!
   name: String!
   secret: String!
   size: Int!
-  updatedAt: DateTime
+  updatedAt: DateTime!
   url: String!
 }
 
@@ -655,7 +658,14 @@ type Mutation {
   createPost(title: String!, url: String!, votes: Int): Post
   updateFile(id: ID!, name: String): File
   updatePost(id: ID!, title: String, url: String, votes: Int): Post
-  updateUser(firstName: String, id: ID!, lastName: String): User
+  updateUser(
+    # im first name discription
+    firstName: String
+    id: ID!
+
+    # asdfasdf
+    lastName: String
+  ): User
   updateOrCreateFile(update: UpdateFile!, create: CreateFile!): File
   updateOrCreatePost(update: UpdatePost!, create: CreatePost!): Post
   updateOrCreateUser(update: UpdateUser!, create: CreateUser!): User
@@ -663,7 +673,14 @@ type Mutation {
   deletePost(id: ID!): Post
   deleteUser(id: ID!): User
   signinUser(email: AUTH_PROVIDER_EMAIL): SigninPayload!
-  createUser(firstName: String!, lastName: String!, authProvider: AuthProviderSignupData!): User
+  createUser(
+    # im first name discription
+    firstName: String!
+
+    # asdfasdf
+    lastName: String!
+    authProvider: AuthProviderSignupData!
+  ): User
 }
 
 # An object with an ID
@@ -673,10 +690,10 @@ interface Node {
 }
 
 type Post implements Node {
-  createdAt: DateTime
+  createdAt: DateTime!
   id: ID!
   title: String!
-  updatedAt: DateTime
+  updatedAt: DateTime!
   url: String!
   votes: Int
 }
@@ -891,10 +908,10 @@ enum PostOrderBy {
 }
 
 type PostPreviousValues {
-  createdAt: DateTime
+  createdAt: DateTime!
   id: ID!
   title: String!
-  updatedAt: DateTime
+  updatedAt: DateTime!
   url: String!
   votes: Int
 }
@@ -1160,19 +1177,26 @@ input UpdatePost {
 }
 
 input UpdateUser {
+  # im first name discription
   firstName: String
   id: ID!
+
+  # asdfasdf
   lastName: String
 }
 
 type User implements Node {
-  createdAt: DateTime
+  createdAt: DateTime!
   email: String
+
+  # im first name discription
   firstName: String!
   id: ID!
+
+  # asdfasdf
   lastName: String!
   password: String
-  updatedAt: DateTime
+  updatedAt: DateTime!
 }
 
 input UserFilter {
@@ -1445,13 +1469,17 @@ enum UserOrderBy {
 }
 
 type UserPreviousValues {
-  createdAt: DateTime
+  createdAt: DateTime!
   email: String
+
+  # im first name discription
   firstName: String!
   id: ID!
+
+  # asdfasdf
   lastName: String!
   password: String
-  updatedAt: DateTime
+  updatedAt: DateTime!
 }
 
 input UserSubscriptionFilter {
